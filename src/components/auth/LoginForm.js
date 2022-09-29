@@ -3,6 +3,7 @@ import { Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useState, useContext } from 'react';
 import axios from 'axios';
+import { apiUrl, LOCAL_STORAGE_TOKEN_NAME } from '../../contexts/constants';
 // import { AuthContext } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router';
 function LoginForm() {
@@ -21,9 +22,12 @@ function LoginForm() {
         e.preventDefault();
         console.warn(loginForm);
         axios
-            .post('http://localhost:5000/api/auth/login', loginForm)
+            .post(`${apiUrl}/auth/login`, loginForm)
             .then(function (response) {
-                console.log(response.data.accessToken);
+                console.log(response.data);
+                localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, response.data.accessToken);
+                return response.data;
+                // console.log(response.data.accessToken);
             })
             .catch(function (error) {
                 console.log(error);
